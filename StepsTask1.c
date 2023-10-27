@@ -6,7 +6,7 @@
 typedef struct {
 	char date[11];
 	char time[6];
-	int steps;
+	char steps[10];
 } FITNESS_DATA;
 
 // Define any additional variables here
@@ -53,8 +53,16 @@ int main() {
     int buffer_size = 25;
     char line_buffer[buffer_size];
 
+    FITNESS_DATA data[500];
+    int i = 0;
+
     while (fgets(line_buffer, buffer_size, file) != NULL) {
-        printf("%s\n", line_buffer);
+        tokeniseRecord(line_buffer, ",", data[i].date, data[i].time, data[i].steps);
+        i++;
+    }
+
+    for (int j=0; j<i; j++){
+        printf("%s/%s/%s\n", data[j].date, data[j].time, data[j].steps);
     }
 
     fclose(file);
