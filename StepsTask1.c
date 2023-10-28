@@ -6,12 +6,28 @@
 typedef struct {
 	char date[11];
 	char time[6];
-	char steps[10];
+	int steps;
 } FITNESS_DATA;
 
 // Define any additional variables here
 
+int noOfRecords(){
+     char* filename = "FitnessData_2023.csv";
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("Error opening file\n");
+        return 1;
+    }
 
+    int buffer_size = 25;
+    char line_buffer[buffer_size];
+    int count = 0;
+
+    while (fgets(line_buffer, buffer_size, file) != NULL) {
+        count++;
+    }
+    return count;
+}
 
 // This is your helper function. Do not change it in any way.
 // Inputs: character array representing a row; the delimiter character
@@ -53,16 +69,20 @@ int main() {
     int buffer_size = 25;
     char line_buffer[buffer_size];
 
-    FITNESS_DATA data[500];
-    int i = 0;
+    FITNESS_DATA data[noOfRecords()];
+    int record = 0;
+    char stepCount[10];
 
     while (fgets(line_buffer, buffer_size, file) != NULL) {
-        tokeniseRecord(line_buffer, ",", data[i].date, data[i].time, data[i].steps);
-        i++;
+        tokeniseRecord(line_buffer, ",", data[record].date, data[record].time, stepCount);
+        data[record].steps = atoi(stepCount);
+        record++;
     }
 
-    for (int j=0; j<i; j++){
-        printf("%s/%s/%s\n", data[j].date, data[j].time, data[j].steps);
+    printf("Number of records in file: %d\n", noOfRecords());
+
+    for (int i=0; i<3; i++){
+        printf("%s/%s/%d\n", data[i].date, data[i].time, data[i].steps);
     }
 
     fclose(file);
