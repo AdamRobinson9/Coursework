@@ -2,30 +2,33 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Define an appropriate struct
+//Fitness data struct
 typedef struct {
 	char date[11];
 	char time[6];
 	int steps;
 } FITNESS_DATA;
 
-// Define any additional variables here
-
+//Method to count the number of items in the csv file.
 int noOfRecords(){
-     char* filename = "FitnessData_2023.csv";
+    //Open the file in read mode.
+    char* filename = "FitnessData_2023.csv";
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
         printf("Error opening file\n");
         return 1;
     }
 
+    //Initialise buffer and variable to count the number of entries.
     int buffer_size = 25;
     char line_buffer[buffer_size];
     int count = 0;
 
+    //Increment the counter each time the 
     while (fgets(line_buffer, buffer_size, file) != NULL) {
         count++;
     }
+    //Return number of items in the file.
     return count;
 }
 
@@ -59,6 +62,7 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 // Complete the main function
 int main() {
+    //Open the file in read mode.
     char* filename = "FitnessData_2023.csv";
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
@@ -66,25 +70,30 @@ int main() {
         return 1;
     }
 
+    //Declare the buffer and variables to store data from the file.
     int buffer_size = 25;
     char line_buffer[buffer_size];
-
     FITNESS_DATA data[noOfRecords()];
     int record = 0;
     char stepCount[10];
 
+    //Step through data, tokenise it and store it in the array of fitness data.
     while (fgets(line_buffer, buffer_size, file) != NULL) {
         tokeniseRecord(line_buffer, ",", data[record].date, data[record].time, stepCount);
         data[record].steps = atoi(stepCount);
         record++;
     }
 
+    //Print the number of records.
     printf("Number of records in file: %d\n", noOfRecords());
 
+    //Print the first 3 lines in the data.
     for (int i=0; i<3; i++){
         printf("%s/%s/%d\n", data[i].date, data[i].time, data[i].steps);
     }
 
+    //Close the file.
     fclose(file);
+    
     return 0;
 }
