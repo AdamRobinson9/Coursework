@@ -40,33 +40,31 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 // Complete the main function
 int main() {
-    bool validChoice = false;
-    while(!validChoice){
+    bool endProcess = false;
+    char filename[100];
+    while(!endProcess){
         printf("Menu Options\nA: Specify the filename to be imported\nB: Display the total number of records in the file\nC: Find the date and time of the timeslot with the fewest steps\nD: Find the date and time of the timeslot with the largest number of steps\nE: Find the mean step count of all the records in the file\nF: Find the longest continuous period where the step count is above 500 steps\nQ: Quit\n");
 
         char option;
-        scanf ("%c", &option);
+        scanf (" %c", &option);
 
 
         switch (option) {
         case 'A':
-            validChoice = true;
             //Open the file in read mode.
-            char* filename;
             printf("Input filename: ");
             scanf("%s", filename);
-            printf("%s", filename);
             FILE *file = fopen(filename, "r");
             if (file == NULL) {
-                printf("Error opening file\n");
+                printf("Error: Could not find or open the file.\n");
                 return 1;
             }
             else{
-                printf("File successfully loaded.");
+                printf("File successfully loaded.\n");
             }
             break;
         case 'B':
-            //code
+            
             break;
         case 'C':
             //code
@@ -87,5 +85,8 @@ int main() {
             printf("Invalid choice. Try again.\n");
         }
     }
-
+    //Close the file.
+    fclose(file);
+    
+    return 0;
 }
