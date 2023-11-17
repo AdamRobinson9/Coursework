@@ -85,7 +85,6 @@ FITNESS_DATA optionC(){
 //Method called when option D is chosen from the menu to calculate the period with the most steps.
 FITNESS_DATA optionD(){
     FITNESS_DATA mostSteps;
-    
     //loop through all items and check if step count is higher for that period than the current highest count.
     for (int i = 0; i < noOfRecords(); i++){
         if(i==0){
@@ -113,9 +112,24 @@ int optionE(){
 }
 
 int optionF(){
+    int highestCount = 0;
+    int highestStart = 0;
+    int start;
     for (int i=0; i<noOfRecords(); i++){
-        
+        if(data[i].steps > 500 && data[i-1].steps < 500){
+            start = i;
+            int currentCount = 0;
+            while (data[i + currentCount].steps > 500){
+                currentCount++;
+            }
+            if(currentCount > highestCount){
+                highestCount = currentCount;
+                highestStart = i;
+            }
+        }
     }
+    printf("Longest period start: %s %s\n", data[highestStart].date, data[highestStart].time);
+    printf("Longest period end: %s %s\n", data[highestStart + highestCount - 1].date, data[highestStart + highestCount - 1].time);
 }
 
 // Complete the main function
@@ -184,7 +198,7 @@ int main() {
             printf("Mean step count: %d\n", optionE());
             break;
         case 'F':
-            //code
+            optionF();
             break;
         case 'Q':
             return 0;
