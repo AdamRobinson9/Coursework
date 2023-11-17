@@ -111,23 +111,30 @@ int optionE(){
     return total/records;
 }
 
+//Method called when option F chosen from menu to print the longest continuous period with 500+ steps
 int optionF(){
+    //declare variables to store the data about thee longest period
     int highestCount = 0;
     int highestStart = 0;
     int start;
+    //step through all items from the file
     for (int i=0; i<noOfRecords(); i++){
+        //find the first entry with 500+ steps
         if(data[i].steps > 500 && data[i-1].steps < 500){
             start = i;
+            //Count through the following entries that also have 500+ steps
             int currentCount = 0;
             while (data[i + currentCount].steps > 500){
                 currentCount++;
             }
+            //check if the current period is the longest period
             if(currentCount > highestCount){
                 highestCount = currentCount;
                 highestStart = i;
             }
         }
     }
+    //print information about the longest period
     printf("Longest period start: %s %s\n", data[highestStart].date, data[highestStart].time);
     printf("Longest period end: %s %s\n", data[highestStart + highestCount - 1].date, data[highestStart + highestCount - 1].time);
 }
