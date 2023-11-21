@@ -152,7 +152,8 @@ int main() {
                 "D: Find the date and time of the timeslot with the largest number of steps\n"
                 "E: Find the mean step count of all the records in the file\n"
                 "F: Find the longest continuous period where the step count is above 500 steps\n"
-                "Q: Quit\n");
+                "Q: Quit\n"
+                "Enter choice: ");
 
         //Read in the user's choice from the menu.
         char option;
