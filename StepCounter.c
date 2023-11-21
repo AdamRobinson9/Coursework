@@ -209,6 +209,7 @@ int main() {
             optionF();
             break;
         case 'Q':
+            free(data);
             return 0;
             break;
         default:
