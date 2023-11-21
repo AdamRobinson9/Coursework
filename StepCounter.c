@@ -11,29 +11,7 @@
 // Global variables for filename and FITNESS_DATA array
 FILE *file;
 FITNESS_DATA *data;
-
-//Method to count the number of items in the csv file.
-int noOfRecords(){
-    //Open the file in read mode.
-    char* filename = "FitnessData_2023.csv";
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
-        printf("Error opening file\n");
-        return 1;
-    }
-
-    //Initialise buffer and variable to count the number of entries.
-    int buffer_size = 25;
-    char line_buffer[buffer_size];
-    int count = 0;
-
-    //Increment the counter each time the 
-    while (fgets(line_buffer, buffer_size, file) != NULL) {
-        count++;
-    }
-    //Return number of items in the file.
-    return count;
-}
+int noOfRecords = 0;
 
 // This is your helper function. Do not change it in any way.
 // Inputs: character array representing a row; the delimiter character
@@ -64,12 +42,13 @@ void tokeniseRecord(const char *input, const char *delimiter,
                     }
 
 
+
 //Method called when option C is chosen from menu to calculate the period with the fewest steps.
 FITNESS_DATA optionC(){
     FITNESS_DATA fewestSteps;
     
     //loop through all items and check if step count is lower for that period than the current lowest count.
-    for (int i = 0; i < noOfRecords(); i++){
+    for (int i = 0; i < noOfRecords; i++){
         if(i==0){
             fewestSteps = data[i];
         }
@@ -86,7 +65,7 @@ FITNESS_DATA optionC(){
 FITNESS_DATA optionD(){
     FITNESS_DATA mostSteps;
     //loop through all items and check if step count is higher for that period than the current highest count.
-    for (int i = 0; i < noOfRecords(); i++){
+    for (int i = 0; i < noOfRecords; i++){
         if(i==0){
             mostSteps = data[i];
         }
@@ -99,16 +78,25 @@ FITNESS_DATA optionD(){
     return mostSteps;
 }
 
+int roundNumber(float number){
+    if (number - (int)number > 0.5){
+        return (int)number + 1;
+    }
+    else{
+        return number;
+    }
+}
+
 //Method called when option E is chosen from the menu to calculate the mean no of steps.
 int optionE(){
-    int records = noOfRecords();
-    int total = 0;
+    int records = noOfRecords;
+    float total = 0;
     //Step through all of the step counts and calculate a total.
     for(int i=0; i<records; i++){
         total = total + data[i].steps;
     }
     //Calculate the mean and return it.
-    return total/records;
+    return roundNumber(total/records);
 }
 
 //Method called when option F chosen from menu to print the longest continuous period with 500+ steps
@@ -118,7 +106,7 @@ int optionF(){
     int highestStart = 0;
     int start;
     //step through all items from the file
-    for (int i=0; i<noOfRecords(); i++){
+    for (int i=0; i<noOfRecords; i++){
         //find the first entry with 500+ steps
         if(data[i].steps > 500 && data[i-1].steps < 500){
             start = i;
@@ -137,6 +125,7 @@ int optionF(){
     //print information about the longest period
     printf("Longest period start: %s %s\n", data[highestStart].date, data[highestStart].time);
     printf("Longest period end: %s %s\n", data[highestStart + highestCount - 1].date, data[highestStart + highestCount - 1].time);
+    return 0;
 }
 
 // Complete the main function
@@ -175,7 +164,13 @@ int main() {
                 //Declare variables to store data read from the file.
                 int buffer_size = 25;
                 char line_buffer[buffer_size];
-                data = malloc(noOfRecords() * sizeof(FITNESS_DATA));
+                while (fgets(line_buffer, buffer_size, file) != NULL) {
+                    noOfRecords++;
+                }
+                data = malloc(noOfRecords * sizeof(FITNESS_DATA));
+                
+                rewind(file);
+
                 int record = 0;
                 char stepCount[10];
                 //Step through data, tokenise it and store it in the array of fitness data.
@@ -191,7 +186,7 @@ int main() {
             break;
         case 'B':
             //Print the number of records in the file, counted by the noOfRecords method.
-            printf("Total records: %d\n", noOfRecords());
+            printf("Total records: %d\n", noOfRecords);
             break;
         case 'C':
             //Print the date and time of the fewest steps period, calculated by the optionC method.
