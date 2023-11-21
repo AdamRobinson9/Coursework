@@ -210,6 +210,7 @@ int main() {
             break;
         case 'Q':
             free(data);
+            endProcess = true;
             return 0;
             break;
         default:
