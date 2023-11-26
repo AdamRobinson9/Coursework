@@ -31,6 +31,34 @@ void tokeniseRecord(char *record, char delimiter, char *date, char *time, int *s
     }
 }
 
+int sortData(){
+    for (int i=0; i<noOfRecords; i++){
+        for (int j=0; j<noOfRecords-1; j++){
+            if(data[j].steps < data[j+1].steps){
+                FitnessData temp = data[j];
+                data[j] = data[j+1];
+                data[j+1] = temp;
+            }
+        }
+    }
+    return 0;
+}
+
+int outputData(char filename[]){
+    strcat(filename, ".tsv");
+    FILE *file = fopen(filename, "w");
+    if(file == NULL){
+        perror("");
+        return 1;
+    }
+
+    for(int i=0; i<noOfRecords; i++){
+        fprintf(file, "%s\t%s\t%d\n", data[i].date, data[i].time, data[i].steps);
+    }
+    fclose(file);
+    return 0;
+}
+
 int main() {
     char filename[100];
     printf("Input filename: ");
@@ -61,7 +89,7 @@ int main() {
                 
         bool invalidData = false;
         for (int i=0; i<noOfRecords; i++){
-            if(strlen(data[i].date) != 10 || strlen(data[i].time) != 5 || data[i].time < 0){
+            if(strlen(data[i].date) != 10 || strlen(data[i].time) != 5 || data[i].steps < 0){
                 invalidData = true;
             }
         }
@@ -71,9 +99,9 @@ int main() {
             return 1;
         }
         else{
-            for (int i=0; i<noOfRecords; i++){
-                printf("%s\t%s\t%d\n", data[i].date, data[i].time, data[i].steps);
-            }
+            sortData();
+            outputData(filename);
+            return 0;
         }
     }
     //Close the file.
