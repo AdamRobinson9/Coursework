@@ -27,6 +27,9 @@ void tokeniseRecord(char *record, char delimiter, char *date, char *time, int *s
             if (ptr != NULL) {
                 *steps = atoi(ptr);
             }
+            else{
+                *steps = -1;
+            }
         }
     }
 }
@@ -56,7 +59,6 @@ int outputData(char filename[]){
         fprintf(file, "%s\t%s\t%d\n", data[i].date, data[i].time, data[i].steps);
     }
     fclose(file);
-    return 0;
 }
 
 int main() {
@@ -86,6 +88,9 @@ int main() {
             tokeniseRecord(line_buffer, ',', data[record].date, data[record].time, &data[record].steps);
             record++;
         }
+
+        //Close the file.
+        fclose(file);
                 
         bool invalidData = false;
         for (int i=0; i<noOfRecords; i++){
@@ -104,6 +109,5 @@ int main() {
             return 0;
         }
     }
-    //Close the file.
-    fclose(file);
+    
 }
