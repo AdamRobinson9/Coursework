@@ -24,7 +24,7 @@ void tokeniseRecord(char *record, char delimiter, char *date, char *time, int *s
         if (ptr != NULL) {
             strcpy(time, ptr);
             ptr = strtok(NULL, &delimiter);
-            if (ptr != NULL) {
+            if (ptr != NULL && ptr[0] != '\n') {
                 *steps = atoi(ptr);
             }
             else{
